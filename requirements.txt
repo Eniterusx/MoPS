@@ -1,0 +1,6 @@
+nbconvert
+ipykernel
+pint
+matplotlib
+scipy
+open_atmos_jupyter_utils
