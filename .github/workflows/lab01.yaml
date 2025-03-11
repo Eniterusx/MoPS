@@ -4,12 +4,40 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - run: pip install nbconvert
-    - run: sudo apt-get install pandoc
-    - run: sudo apt-get install inkscape
-    - run: sudo apt-get install texlive-xetex
     - uses: actions/checkout@v4
-    - run: python -m nbconvert --to pdf --execute lab_01/pint_and_boiling_point.ipynb
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+
+    - name: Cache pip packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Cache apt packages
+      uses: actions/cache@v4
+      with:
+        path: /var/cache/apt/archives
+        key: ${{ runner.os }}-apt-${{ hashFiles('**/lab01.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-apt-
+
+    - name: Install Python dependencies
+      run: pip install nbconvert ipykernel
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y pandoc inkscape texlive-xetex
+
+    - name: Convert notebook to PDF
+      run: python -m nbconvert --to pdf --execute lab_01/pint_and_boiling_point.ipynb
+
     - uses: actions/upload-artifact@v4
       with:
         name: lab01
