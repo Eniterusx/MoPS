@@ -28,7 +28,7 @@ jobs:
           ${{ runner.os }}-apt-
 
     - name: Install Python dependencies
-      run: pip install nbconvert ipykernel
+      run: pip install nbconvert ipykernel pint matplotlib scipy open_atmos_jupyter_utils
 
     - name: Install system dependencies
       run: |
