@@ -9,7 +9,7 @@ jobs:
     - run: sudo apt-get install inkscape
     - run: sudo apt-get install texlive-xetex
     - uses: actions/checkout@v4
-    - run: python -m nbconvert --to pdf lab_01/pint_and_boiling_point.ipynb
+    - run: python -m nbconvert --to pdf --execute lab_01/pint_and_boiling_point.ipynb
     - uses: actions/upload-artifact@v4
       with:
         name: lab01
