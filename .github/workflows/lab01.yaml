@@ -7,5 +7,6 @@ jobs:
     - run: pip install nbconvert
     - run: sudo apt-get install pandoc
     - run: sudo apt-get install inkscape
+    - run: sudo apt-get install texlive-xetex
     - uses: actions/checkout@v4
     - run: python -m nbconvert --to pdf lab_01/pint_and_boiling_point.ipynb
