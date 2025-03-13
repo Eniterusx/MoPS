@@ -1,5 +1,5 @@
 name: lab01
-on: [push]
+on:
   push:
     paths:
       - 'lab_01/**'
