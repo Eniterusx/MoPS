@@ -1,0 +1,47 @@
+name: lab06
+on:
+  push:
+    paths:
+      - 'lab_06/**'
+jobs:
+  save_to_pdf:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+
+    - name: Cache pip packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Cache apt packages
+      uses: actions/cache@v4
+      with:
+        path: /var/cache/apt/archives
+        key: ${{ runner.os }}-apt-${{ hashFiles('**/lab06.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-apt-
+
+    - name: Install Python dependencies
+      run: pip install nbconvert ipykernel pint matplotlib scipy open_atmos_jupyter_utils
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y pandoc inkscape texlive-xetex
+
+    - name: Convert notebook to PDF
+      run: python -m nbconvert --to pdf --execute lab_06/lab_06.ipynb
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: lab06
+        path: lab_06/lab_06.pdf
